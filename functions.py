@@ -64,3 +64,17 @@ def compare_runs(time_one, dist_one, time_two, dist_two):
         secsubtraction = subtraction % 60
         print(f'Você foi mais rápido na corrida 2!\n'
               f'Diferença de pace: {minsubtraction}:{secsubtraction:02} min/km')
+
+def hist_run():
+    hist = []
+    user = int(input('Quantas corridas você gostaria de registrar?: '))
+    for count in range(1, user + 1, 1):
+        runs = {}
+        runs['dist'] = float(input(f'Qual a distância da {count}ª corrida?: '))
+        runs['time'] = float(input(f'Qual o tempo da {count}ª corrida?: '))
+        hist.append(runs)
+    print('==== HISTÓRICO DE CORRIDAS ====')
+    count2 = 0
+    for run in hist:
+        count2 += 1
+        print(f'Corrida {count2} -> {run['dist']:.2f} | {show_pace(run['time'], run['dist'])} | {calculate_speed(run['time'], run['dist'])}')
