@@ -112,3 +112,13 @@ def data_analysis(hist):
           f'\n'
           f'Corrida mais longa: {count_longest}\n'
           f'Distância: {bigger_dist}')
+
+def goal_dist(hist):
+    goal = float(input('Qual sua meta de distÂncia percorrida total?: '))
+    km_total = 0
+    for run in hist:
+        km_total += run['dist']
+    if goal <= km_total:
+        print('Parabéns, sua meta já foi batida!')
+    else:
+        print(f'Ainda temos um trabalho a fazer! Faltam {goal - km_total:.2f} km')
