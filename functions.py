@@ -70,14 +70,17 @@ def hist_run():
     user = int(input('Quantas corridas você gostaria de registrar?: '))
     for count in range(1, user + 1, 1):
         runs = {}
+        print('-' * 34)
         runs['dist'] = float(input(f'Qual a distância da {count}ª corrida?: '))
         runs['time'] = float(input(f'Qual o tempo da {count}ª corrida?: '))
+        print('-' * 34)
         hist.append(runs)
+    print('\n')
     print('==== HISTÓRICO DE CORRIDAS ====')
     count2 = 0
     for run in hist:
         count2 += 1
-        print(f'Corrida {count2} -> {run['dist']:.2f} | {show_pace(run['time'], run['dist'])} | {calculate_speed(run['time'], run['dist'])}')
+        print(f'Corrida {count2} -> {run['dist']:.2f} km | {show_pace(run['time'], run['dist'])} min | {calculate_speed(run['time'], run['dist'])} km/h')
     return hist
 
 def data_analysis(hist):
@@ -101,8 +104,9 @@ def data_analysis(hist):
             bigger_dist = run['dist']
     general_pace = show_pace(seconds / 60, km_total)
     general_vel = calculate_speed(seconds / 60, km_total)
+    print('\n')
     print(f'==== ANÁLISE GERAL ====\n'
-          f'Distância total: {km_total} km\n'
+          f'Distância total: {km_total:.2f} km\n'
           f'Tempo total: {int(seconds // 60)}:{int(seconds%60):02} min\n'
           f'Pace médio geral: {general_pace}\n'
           f'Velocidade média geral: {general_vel:.2f}\n'
@@ -110,8 +114,9 @@ def data_analysis(hist):
           f'Corrida mais rápida: Corrida {count_pace}\n'
           f'Pace: {int(smaller_pace // 60)}:{int(smaller_pace % 60):02}\n'
           f'\n'
+          f'{'-' * 34}\n'
           f'Corrida mais longa: {count_longest}\n'
-          f'Distância: {bigger_dist}')
+          f'Distância: {bigger_dist:.2f} km\n')
 
 def goal_dist(hist):
     goal = float(input('Qual sua meta de distÂncia percorrida total?: '))
@@ -120,5 +125,7 @@ def goal_dist(hist):
         km_total += run['dist']
     if goal <= km_total:
         print('Parabéns, sua meta já foi batida!')
+        print('-' * 34)
     else:
         print(f'Ainda temos um trabalho a fazer! Faltam {goal - km_total:.2f} km')
+        print('-' * 34)
