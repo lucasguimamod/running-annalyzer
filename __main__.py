@@ -7,6 +7,7 @@ def main():
     hist = hist_run()
     data_analysis(hist)
     goal_dist(hist)
+    best_run(hist)
 
 if __name__ == '__main__':
     main()

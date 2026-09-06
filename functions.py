@@ -129,3 +129,29 @@ def goal_dist(hist):
     else:
         print(f'Ainda temos um trabalho a fazer! Faltam {goal - km_total:.2f} km')
         print('-' * 34)
+
+def best_run(hist):
+    smaller_pace = 1000
+    counter = 0
+    count_pace = 0
+    count_vel = 0
+    bigger_vel = 0
+    for run in hist:
+        counter += 1
+        if ((int(run['time']) * 60) + ((run['time'] % 1) * 60)) / run['dist'] < smaller_pace:
+            smaller_pace = ((int(run['time']) * 60) + ((run['time'] % 1) * 60)) / run['dist']
+            count_pace = counter
+        if calculate_speed(run['time'], run['dist']) > bigger_vel:
+            count_vel = counter
+            bigger_vel = calculate_speed(run['time'], run['dist'])
+    print('=' * 30)
+    print('MELHOR DESEMPENHO'.center(30))
+    print('=' * 30)
+    print('\n')
+    print(f'Melhor pace:\n'
+          f'Corrida {count_pace}\n'
+          f'Pace: {int(smaller_pace // 60)}:{int(smaller_pace % 60):02} min/km\n'
+          f'\n'
+          f'Maior velocidade:\n'
+          f'Corrida {count_vel}\n'
+          f'Velocidade: {bigger_vel:.2f} km/h')
