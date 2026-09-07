@@ -155,3 +155,46 @@ def best_run(hist):
           f'Maior velocidade:\n'
           f'Corrida {count_vel}\n'
           f'Velocidade: {bigger_vel:.2f} km/h')
+
+def show_history(hist):
+    counter = 0
+    for run in hist:
+        counter += 1
+        print(f'Corrida {counter} -> {run['dist']:.2f} | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h')
+
+def menu():
+    print('=' * 30)
+    print('RUNNING ANALYZER'.center(30))
+    print('=' * 30)
+    hist = hist_run()
+    while True:
+        try:
+            user = int(input('\n'        
+              '1 - Registrar corridas\n'
+              '2 - Ver histórico\n'
+              '3 - Análise geral\n'
+              '4 - Meta de distância\n'
+              '5 - Melhor desempenho\n'
+              '0 - Sair\n'
+              '\n'
+              'Escolha uma opção: '))
+        except:
+            print('Opção não disponível, tente novamente!')
+            continue
+        if user == 1:
+            hist = hist_run()
+        elif user == 2:
+            show_history(hist)
+        elif user == 3:
+            data_analysis(hist)
+        elif user == 4:
+            goal_dist(hist)
+        elif user == 5:
+            best_run(hist)
+        elif user == 0:
+            print('Encerrando Running Analyzer...\n'
+                  'Até a próxima!')
+        elif user < 0 or user >= 6:
+            print('Opção não disponível, tente novamente!')
+            continue
+            break
