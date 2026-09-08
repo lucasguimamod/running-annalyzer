@@ -183,6 +183,49 @@ def remove_run(hist):
     if user > counter:
         print('Corrida não existente!')
 
+def filter_runs(hist):
+    user = int(input('Qual o filtro desejado?\n'
+                     '1 - Corridas acima de x km\n'
+                     '2 - Corridas abaixo de x km\n'
+                     '3 - Corridas com pace melhor que x\n'
+                     '0 - Voltar ao menu inicial\n'
+                     'Escolha uma opção: '))
+    if user == 1:
+        useroption = float(input('Distância de filtragem: '))
+        counter = 0
+        for run in hist:
+            counter += 1
+            if run['dist'] > useroption:
+                print(f'Corrida {counter} -> {run['dist']:.2f} km | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h')
+
+    elif user == 2:
+        useroption = float(input('Distância de filtragem: '))
+        counter = 0
+        for run in hist:
+            counter += 1
+            if run['dist'] < useroption:
+                print(f'Corrida {counter} -> {run['dist']:.2f} km | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h')
+
+    elif user == 3:
+        useroption = str(input('Distância de filtragem: (Ex: X:XX)'))
+        counter = 0
+        partes = useroption.split(':')
+        minutes = int(partes[0])
+        seconds = int(partes[1])
+        total_seconds = minutes * 60 + seconds
+        for run in hist:
+            pace = show_pace(run['time'], run['dist'])
+            partes_run = pace.split(':')
+            minutes_run = int(partes_run[0])
+            seconds_run = int(partes_run[1])
+            total_seconds_run = minutes_run * 60 + seconds_run
+            counter += 1
+            if total_seconds_run < total_seconds:
+                print(f'Corrida {counter} -> {run['dist']:.2f} km | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h')
+
+    elif user == 0:
+        menu(hist)
+
 def save_history(hist):
     arquivo = open('historico.json', 'w')
     json.dump(hist, arquivo)
@@ -201,6 +244,7 @@ def menu(hist):
               '4 - Análise geral\n'
               '5 - Meta de distância\n'
               '6 - Melhor desempenho\n'
+              '7 - Filtrar corridas\n'
               '0 - Sair'
               '\n'
               'Escolha uma opção: '))
@@ -219,6 +263,8 @@ def menu(hist):
             goal_dist(hist)
         elif user == 6:
             best_run(hist)
+        elif user == 7:
+            filter_runs(hist)
         elif user < 0 or user >= 7:
             print('Opção não disponível, tente novamente!')
         elif user == 0:
