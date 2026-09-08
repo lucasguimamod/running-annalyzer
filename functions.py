@@ -226,6 +226,44 @@ def filter_runs(hist):
     elif user == 0:
         menu(hist)
 
+def performance_evolution(hist):
+    print('=' * 30)
+    print('EVOLUÇÃO DE DESEMPENHO'.center(30))
+    print('=' * 30)
+    counter1 = 0
+    for runs in hist:
+        counter1 += 1
+    counter2 = 0
+    for run in hist:
+        counter2 += 1
+        if counter2 == 1:
+            print(f'Primeira corrida:\n'
+                  f'Distância: {run['dist']:.2f} km\n'
+                  f'Pace: {show_pace(run['time'], run['dist'])} min/km\n'
+                  f'Velocidade: {calculate_speed(run['time'], run['dist']):.2f}\n'
+                  f'\n')
+            partes1 = show_pace(run['time'], run['dist']).split(':')
+            minutes1 = int(partes1[0])
+            seconds1 = int(partes1[1])
+            total_seconds = minutes1 * 60 + seconds1
+            speed1 = calculate_speed(run['time'], run['dist'])
+        if counter2 == counter1:
+            print(f'Última corrida:\n'
+                  f'Distância: {run['dist']:.2f} km\n'
+                  f'Pace: {show_pace(run['time'], run['dist'])} min/km\n'
+                  f'Velocidade: {calculate_speed(run['time'], run['dist']):.2f}\n'
+                  f'\n')
+            partes2 = show_pace(run['time'], run['dist']).split(':')
+            minutes2 = int(partes2[0])
+            seconds2 = int(partes2[1])
+            total_seconds2 = minutes2 * 60 + seconds2
+            speed2 = calculate_speed(run['time'], run['dist'])
+            print('-' * 30)
+            print('\n')
+            print(f'Evolução do pace: {total_seconds2 - total_seconds} segundos/km')
+            print(f'Evolução da velocidade: {speed2 - speed1:.2f} km/h')
+
+
 def save_history(hist):
     arquivo = open('historico.json', 'w')
     json.dump(hist, arquivo)
@@ -245,6 +283,7 @@ def menu(hist):
               '5 - Meta de distância\n'
               '6 - Melhor desempenho\n'
               '7 - Filtrar corridas\n'
+              '8 - Exibir melhoria de performance\n'
               '0 - Sair'
               '\n'
               'Escolha uma opção: '))
@@ -265,6 +304,8 @@ def menu(hist):
             best_run(hist)
         elif user == 7:
             filter_runs(hist)
+        elif user == 8:
+            performance_evolution(hist)
         elif user < 0 or user >= 7:
             print('Opção não disponível, tente novamente!')
         elif user == 0:
