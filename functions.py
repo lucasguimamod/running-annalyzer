@@ -67,24 +67,6 @@ def compare_runs(time_one, dist_one, time_two, dist_two):
         print(f'Você foi mais rápido na corrida 2!\n'
               f'Diferença de pace: {minsubtraction}:{secsubtraction:02} min/km')
 
-def hist_run():
-    hist = []
-    user = int(input('Quantas corridas você gostaria de registrar?: '))
-    for count in range(1, user + 1, 1):
-        runs = {}
-        print('-' * 34)
-        runs['dist'] = float(input(f'Qual a distância da {count}ª corrida?: '))
-        runs['time'] = float(input(f'Qual o tempo da {count}ª corrida?: '))
-        print('-' * 34)
-        hist.append(runs)
-    print('\n')
-    print('==== HISTÓRICO DE CORRIDAS ====')
-    count2 = 0
-    for run in hist:
-        count2 += 1
-        print(f'Corrida {count2} -> {run['dist']:.2f} km | {show_pace(run['time'], run['dist'])} min | {calculate_speed(run['time'], run['dist'])} km/h')
-    return hist
-
 def data_analysis(hist):
     km_total = 0
     seconds = 0
@@ -162,12 +144,13 @@ def show_history(hist):
     counter = 0
     for run in hist:
         counter += 1
-        print(f'Corrida {counter} -> {run['dist']:.2f} | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h')
+        print(f'Corrida {counter} -> {run['dist']:.2f} | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h | {run['date']}')
 
 def add_run(hist):
     runs = {}
     runs['dist'] = float(input('Qual a distância da corrida?: '))
     runs['time'] = float(input('Qual o tempo da corrida?: '))
+    runs['date'] = str(input('Qual é a data da corrida? (dd/mm/aaaa): '))
     hist.append(runs)
     print('Corrida adicionada com sucesso!')
 
@@ -207,7 +190,7 @@ def filter_runs(hist):
                 print(f'Corrida {counter} -> {run['dist']:.2f} km | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h')
 
     elif user == 3:
-        useroption = str(input('Distância de filtragem: (Ex: X:XX)'))
+        useroption = str(input('Distância de filtragem (Ex: X:XX): '))
         counter = 0
         partes = useroption.split(':')
         minutes = int(partes[0])
@@ -262,7 +245,6 @@ def performance_evolution(hist):
             print('\n')
             print(f'Evolução do pace: {total_seconds2 - total_seconds} segundos/km')
             print(f'Evolução da velocidade: {speed2 - speed1:.2f} km/h')
-
 
 def save_history(hist):
     arquivo = open('historico.json', 'w')
