@@ -162,6 +162,25 @@ def show_history(hist):
         counter += 1
         print(f'Corrida {counter} -> {run['dist']:.2f} | {show_pace(run['time'], run['dist'])} min/km | {calculate_speed(run['time'], run['dist']):.2f} km/h')
 
+def add_run(hist):
+    runs = {}
+    runs['dist'] = float(input('Qual a distância da corrida?: '))
+    runs['time'] = float(input('Qual o tempo da corrida?: '))
+    hist.append(runs)
+    print('Corrida adicionada com sucesso!')
+
+def remove_run(hist):
+    counter = 0
+    user = int(input('Qual o número da corrida a ser removida?: '))
+    for run in hist:
+        counter +=1
+        if user == counter:
+            hist.remove(run)
+            print(f'Corrida {counter} removida com sucesso!')
+            break
+    if user > counter:
+        print('Corrida não existente!')
+
 def menu():
     print('=' * 30)
     print('RUNNING ANALYZER'.center(30))
@@ -170,31 +189,34 @@ def menu():
     while True:
         try:
             user = int(input('\n'        
-              '1 - Registrar corridas\n'
-              '2 - Ver histórico\n'
-              '3 - Análise geral\n'
-              '4 - Meta de distância\n'
-              '5 - Melhor desempenho\n'
-              '0 - Sair\n'
+              '1 - Adicionar corrida\n'
+              '2 - Remover corrida\n'
+              '3 - Ver histórico\n'
+              '4 - Análise geral\n'
+              '5 - Meta de distância\n'
+              '6 - Melhor desempenho\n'
+              '0 - Sair'
               '\n'
               'Escolha uma opção: '))
         except:
             print('Opção não disponível, tente novamente!')
             continue
         if user == 1:
-            hist = hist_run()
+            add_run(hist)
         elif user == 2:
-            show_history(hist)
+            remove_run(hist)
         elif user == 3:
-            data_analysis(hist)
+            show_history(hist)
         elif user == 4:
-            goal_dist(hist)
+            data_analysis(hist)
         elif user == 5:
+            goal_dist(hist)
+        elif user == 6:
             best_run(hist)
         elif user == 0:
             print('Encerrando Running Analyzer...\n'
                   'Até a próxima!')
-        elif user < 0 or user >= 6:
+        elif user < 0 or user >= 7:
             print('Opção não disponível, tente novamente!')
             continue
             break
