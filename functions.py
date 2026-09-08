@@ -1,3 +1,5 @@
+import json
+
 def show_pace(time, dist):
     min = int(time)
     sec = (time % 1) * 60
@@ -181,11 +183,15 @@ def remove_run(hist):
     if user > counter:
         print('Corrida não existente!')
 
-def menu():
+def save_history(hist):
+    arquivo = open('historico.json', 'w')
+    json.dump(hist, arquivo)
+    arquivo.close()
+
+def menu(hist):
     print('=' * 30)
     print('RUNNING ANALYZER'.center(30))
     print('=' * 30)
-    hist = hist_run()
     while True:
         try:
             user = int(input('\n'        
@@ -213,10 +219,9 @@ def menu():
             goal_dist(hist)
         elif user == 6:
             best_run(hist)
+        elif user < 0 or user >= 7:
+            print('Opção não disponível, tente novamente!')
         elif user == 0:
             print('Encerrando Running Analyzer...\n'
                   'Até a próxima!')
-        elif user < 0 or user >= 7:
-            print('Opção não disponível, tente novamente!')
-            continue
             break
