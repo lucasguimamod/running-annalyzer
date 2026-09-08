@@ -152,6 +152,7 @@ def add_run(hist):
     runs['time'] = float(input('Qual o tempo da corrida?: '))
     runs['date'] = str(input('Qual é a data da corrida? (dd/mm/aaaa): '))
     hist.append(runs)
+    save_history(hist)
     print('Corrida adicionada com sucesso!')
 
 def remove_run(hist):
@@ -161,6 +162,7 @@ def remove_run(hist):
         counter +=1
         if user == counter:
             hist.remove(run)
+            save_history(hist)
             print(f'Corrida {counter} removida com sucesso!')
             break
     if user > counter:
