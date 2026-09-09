@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 
 def show_pace(time, dist):
     min = int(time)
@@ -248,6 +249,61 @@ def performance_evolution(hist):
             print(f'Evolução do pace: {total_seconds2 - total_seconds} segundos/km')
             print(f'Evolução da velocidade: {speed2 - speed1:.2f} km/h')
 
+def period_statistics(hist):
+    user = int(input('Qual filtro você gostaria de usar?:\n'
+                     '1 - Últimos 7 dias\n'
+                     '2 - Últimos 30 dias\n'
+                     '3 - Todas as corridas\n'
+                     '0 - Voltar ao menu inicial\n'
+                     'Escolha: '))
+    counter = 0
+    dist_total = 0
+    today = datetime.today()
+    if user == 1:
+        print('=' * 30)
+        print('ESTATÍSTICAS'.center(30))
+        print('=' * 30)
+        sevendays_ago = today - timedelta(days=7)
+        print('Período: Últimos 7 dias')
+        for run in hist:
+            date = datetime.strptime(run['date'], '%d/%m/%Y')
+            if date >= sevendays_ago:
+                counter += 1
+                dist_total += run['dist']
+        print('\n'
+              f'Corridas: {counter}\n'
+              f'Distância total: {dist_total}')
+
+    elif user == 2:
+        print('=' * 30)
+        print('ESTATÍSTICAS'.center(30))
+        print('=' * 30)
+        thirtydays_ago = today - timedelta(days=30)
+        print('Período: Últimos trinta dias')
+        for run in hist:
+            date = datetime.strptime(run['date'], '%d/%m/%Y')
+            if date >= thirtydays_ago:
+                counter += 1
+                dist_total += run['dist']
+        print(f'\n'
+              f'Corridas: {counter}\n'
+              f'Distância total: {dist_total}')
+
+    elif user == 3:
+        print('=' * 30)
+        print('ESTATÍSTICAS'.center(30))
+        print('=' * 30)
+        print('Filtro: Todas as corridas')
+        for run in hist:
+            counter += 1
+            dist_total += run['dist']
+        print(f'\n'
+              f'Corridas: {counter}\n'
+              f'Distância total: {dist_total}')
+
+    elif user == 0:
+        menu(hist)
+
 def save_history(hist):
     arquivo = open('historico.json', 'w')
     json.dump(hist, arquivo)
@@ -268,6 +324,7 @@ def menu(hist):
               '6 - Melhor desempenho\n'
               '7 - Filtrar corridas\n'
               '8 - Exibir melhoria de performance\n'
+              '9 - Filtrar corridas por período\n'
               '0 - Sair'
               '\n'
               'Escolha uma opção: '))
@@ -290,7 +347,9 @@ def menu(hist):
             filter_runs(hist)
         elif user == 8:
             performance_evolution(hist)
-        elif user < 0 or user >= 7:
+        elif user == 9:
+            period_statistics(hist)
+        elif user < 0 or user >= 10:
             print('Opção não disponível, tente novamente!')
         elif user == 0:
             print('Encerrando Running Analyzer...\n'
