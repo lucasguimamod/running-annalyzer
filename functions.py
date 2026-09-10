@@ -1,5 +1,7 @@
 import json
 from datetime import datetime, timedelta
+from calendar import monthrange
+
 
 def show_pace(time, dist):
     min = int(time)
@@ -251,8 +253,8 @@ def performance_evolution(hist):
 
 def period_statistics(hist):
     user = int(input('Qual filtro você gostaria de usar?:\n'
-                     '1 - Últimos 7 dias\n'
-                     '2 - Últimos 30 dias\n'
+                     '1 - Últimos x dias\n'
+                     '2 - Últimos x meses\n'
                      '3 - Todas as corridas\n'
                      '0 - Voltar ao menu inicial\n'
                      'Escolha: '))
@@ -260,49 +262,43 @@ def period_statistics(hist):
     dist_total = 0
     today = datetime.today()
     if user == 1:
+        days_user = int(input('Quantos dias gostaria de voltar para visualizar suas corridas?: '))
         print('=' * 30)
         print('ESTATÍSTICAS'.center(30))
         print('=' * 30)
-        sevendays_ago = today - timedelta(days=7)
-        print('Período: Últimos 7 dias')
+        days_user_ago = today - timedelta(days=days_user)
         for run in hist:
             date = datetime.strptime(run['date'], '%d/%m/%Y')
-            if date >= sevendays_ago:
-                counter += 1
-                dist_total += run['dist']
-        print('\n'
-              f'Corridas: {counter}\n'
-              f'Distância total: {dist_total}')
-
-    elif user == 2:
-        print('=' * 30)
-        print('ESTATÍSTICAS'.center(30))
-        print('=' * 30)
-        thirtydays_ago = today - timedelta(days=30)
-        print('Período: Últimos trinta dias')
-        for run in hist:
-            date = datetime.strptime(run['date'], '%d/%m/%Y')
-            if date >= thirtydays_ago:
+            if date >= days_user_ago:
                 counter += 1
                 dist_total += run['dist']
         print(f'\n'
               f'Corridas: {counter}\n'
               f'Distância total: {dist_total}')
 
-    elif user == 3:
+
+    if user == 2:
+        months_user = int(input('Quantos meses gostaria de voltar para visualizar suas corridas?: '))
         print('=' * 30)
         print('ESTATÍSTICAS'.center(30))
         print('=' * 30)
-        print('Filtro: Todas as corridas')
+        total_months = (today.year * 12 + (today.month - 1)) - months_user
+        year = total_months // 12
+        month = total_months % 12 + 1
+        days_in_month = monthrange(year, month)[1]
+        if today.day <= days_in_month:
+            day = today.day
+        else:
+            day = days_in_month
+        new_date = datetime(year, month, day)
         for run in hist:
-            counter += 1
-            dist_total += run['dist']
+            date = datetime.strptime(run['date'], '%d/%m/%Y')
+            if date >= new_date:
+                counter += 1
+                dist_total += run['dist']
         print(f'\n'
               f'Corridas: {counter}\n'
               f'Distância total: {dist_total}')
-
-    elif user == 0:
-        menu(hist)
 
 def save_history(hist):
     arquivo = open('historico.json', 'w')
