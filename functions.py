@@ -261,6 +261,7 @@ def period_statistics(hist):
     counter = 0
     dist_total = 0
     today = datetime.today()
+    total_time = 0
     if user == 1:
         days_user = int(input('Quantos dias gostaria de voltar para visualizar suas corridas?: '))
         print('=' * 30)
@@ -272,9 +273,14 @@ def period_statistics(hist):
             if date >= days_user_ago:
                 counter += 1
                 dist_total += run['dist']
+                total_time += (int(run['time']) * 60) + ((run['time'] % 1) * 60)
+        general_pace = show_pace(total_time / 60, dist_total)
+        general_speed = calculate_speed(total_time / 60, dist_total)
         print(f'\n'
               f'Corridas: {counter}\n'
-              f'Distância total: {dist_total}')
+              f'Distância total: {dist_total}\n'
+              f'Pace médio: {general_pace} min/km\n'
+              f'Velocidade média: {general_speed:.2f} km/h')
 
 
     if user == 2:
@@ -296,9 +302,33 @@ def period_statistics(hist):
             if date >= new_date:
                 counter += 1
                 dist_total += run['dist']
+                total_time += (int(run['time']) * 60) + ((run['time'] % 1) * 60)
+            general_pace = show_pace(total_time / 60, dist_total)
+            general_speed = calculate_speed(total_time / 60, dist_total)
         print(f'\n'
               f'Corridas: {counter}\n'
-              f'Distância total: {dist_total}')
+              f'Distância total: {dist_total}\n'
+              f'Pace médio: {general_pace} min/km\n'
+              f'Velocidade média: {general_speed:.2f} km/h')
+
+    if user == 3:
+        print('=' * 30)
+        print('ESTATÍSTICAS'.center(30))
+        print('=' * 30)
+        for run in hist:
+            counter += 1
+            dist_total += run['dist']
+            total_time += (int(run['time']) * 60) + ((run['time'] % 1) * 60)
+        general_pace = show_pace(total_time / 60, dist_total)
+        general_speed = calculate_speed(total_time / 60, dist_total)
+        print(f'\n'
+              f'Corridas: {counter}\n'
+              f'Distância total: {dist_total}\n'
+              f'Pace médio: {general_pace} min/km\n'
+              f'Velocidade média: {general_speed:.2f} km/h')
+
+    if user == 0:
+        menu(hist)
 
 def save_history(hist):
     arquivo = open('historico.json', 'w')
