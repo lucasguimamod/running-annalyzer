@@ -305,6 +305,18 @@ def period_statistics(hist):
           f'Pace médio: {general_pace} min/km\n'
           f'Velocidade média: {general_speed:.2f} km/h')
 
+def filter_menu(hist):
+    user = int(input('Gostaria de filtrar suas corridas por meio de estatísticas ou por datas?:\n'
+                     '1 - Estatísticas\n'
+                     '2 - Datas\n'
+                     '0 - Voltar ao menu principal\n'
+                     'Escolha: '))
+    if user == 1:
+        filter_runs(hist)
+    elif user == 2:
+        period_statistics(hist)
+    elif user == 0:
+        return
 
 def save_history(hist):
     arquivo = open('historico.json', 'w')
@@ -326,7 +338,6 @@ def menu(hist):
               '6 - Melhor desempenho\n'
               '7 - Filtrar corridas\n'
               '8 - Exibir melhoria de performance\n'
-              '9 - Filtrar corridas por período\n'
               '0 - Sair'
               '\n'
               'Escolha uma opção: '))
@@ -346,11 +357,9 @@ def menu(hist):
         elif user == 6:
             best_run(hist)
         elif user == 7:
-            filter_runs(hist)
+            filter_menu(hist)
         elif user == 8:
             performance_evolution(hist)
-        elif user == 9:
-            period_statistics(hist)
         elif user < 0 or user >= 10:
             print('Opção não disponível, tente novamente!')
         elif user == 0:
