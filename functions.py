@@ -262,32 +262,14 @@ def period_statistics(hist):
     dist_total = 0
     today = datetime.today()
     total_time = 0
+    start_date = None
     if user == 1:
         days_user = int(input('Quantos dias gostaria de voltar para visualizar suas corridas?: '))
-        print('=' * 30)
-        print('ESTATÍSTICAS'.center(30))
-        print('=' * 30)
         days_user_ago = today - timedelta(days=days_user)
-        for run in hist:
-            date = datetime.strptime(run['date'], '%d/%m/%Y')
-            if date >= days_user_ago:
-                counter += 1
-                dist_total += run['dist']
-                total_time += (int(run['time']) * 60) + ((run['time'] % 1) * 60)
-        general_pace = show_pace(total_time / 60, dist_total)
-        general_speed = calculate_speed(total_time / 60, dist_total)
-        print(f'\n'
-              f'Corridas: {counter}\n'
-              f'Distância total: {dist_total}\n'
-              f'Pace médio: {general_pace} min/km\n'
-              f'Velocidade média: {general_speed:.2f} km/h')
-
+        start_date = days_user_ago
 
     if user == 2:
         months_user = int(input('Quantos meses gostaria de voltar para visualizar suas corridas?: '))
-        print('=' * 30)
-        print('ESTATÍSTICAS'.center(30))
-        print('=' * 30)
         total_months = (today.year * 12 + (today.month - 1)) - months_user
         year = total_months // 12
         month = total_months % 12 + 1
@@ -297,38 +279,32 @@ def period_statistics(hist):
         else:
             day = days_in_month
         new_date = datetime(year, month, day)
-        for run in hist:
-            date = datetime.strptime(run['date'], '%d/%m/%Y')
-            if date >= new_date:
-                counter += 1
-                dist_total += run['dist']
-                total_time += (int(run['time']) * 60) + ((run['time'] % 1) * 60)
-            general_pace = show_pace(total_time / 60, dist_total)
-            general_speed = calculate_speed(total_time / 60, dist_total)
-        print(f'\n'
-              f'Corridas: {counter}\n'
-              f'Distância total: {dist_total}\n'
-              f'Pace médio: {general_pace} min/km\n'
-              f'Velocidade média: {general_speed:.2f} km/h')
+        start_date = new_date
 
-    if user == 3:
-        print('=' * 30)
-        print('ESTATÍSTICAS'.center(30))
-        print('=' * 30)
-        for run in hist:
+    if user == 0:
+        return
+
+    print('=' * 30)
+    print('ESTATÍSTICAS'.center(30))
+    print('=' * 30)
+
+    for run in hist:
+        date = datetime.strptime(run['date'], '%d/%m/%Y')
+        if start_date is None or date >= start_date:
             counter += 1
             dist_total += run['dist']
             total_time += (int(run['time']) * 60) + ((run['time'] % 1) * 60)
-        general_pace = show_pace(total_time / 60, dist_total)
-        general_speed = calculate_speed(total_time / 60, dist_total)
-        print(f'\n'
-              f'Corridas: {counter}\n'
-              f'Distância total: {dist_total}\n'
-              f'Pace médio: {general_pace} min/km\n'
-              f'Velocidade média: {general_speed:.2f} km/h')
+    if counter == 0:
+        print('Não há corridas dentro do período selecionado!')
+        return
+    general_pace = show_pace(total_time / 60, dist_total)
+    general_speed = calculate_speed(total_time / 60, dist_total)
+    print(f'\n'
+          f'Corridas: {counter}\n'
+          f'Distância total: {dist_total}\n'
+          f'Pace médio: {general_pace} min/km\n'
+          f'Velocidade média: {general_speed:.2f} km/h')
 
-    if user == 0:
-        menu(hist)
 
 def save_history(hist):
     arquivo = open('historico.json', 'w')
